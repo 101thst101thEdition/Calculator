@@ -41,8 +41,8 @@ def start():
     d2 = None if op in singOperations else input("Input digit 2")
     try:
         print(calculate(d1, op, d2))
-    except KeyError:
-        print(f"{op} is not a valid operator")
+    except KeyError as e:
+        print(f"{e} is not a valid operator")
     except ValueError as e:
         print(f"{e} is not a valid input")
     except ZeroDivisionError:
