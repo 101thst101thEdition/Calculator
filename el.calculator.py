@@ -41,7 +41,7 @@ def calculate(d1,op,d2):
     if op in ('sin','cos','tan','asin','acos','atan'):
         return(f"The answer to the {op} of {d1} is {round(float(operations[op](d1)), 5)}")
     elif op == '/^':
-        return(f"The answer to {d1} /^ {d2} is {round(float(operations[op](d1,1/d2)}")
+        return(f"The answer to {d1} /^ {d2} is {round(float(operations[op](d1,1/d2)}, 5)")
     elif op in operations:
         return(f"The answer to {d1} {op} {d2} is {round(float(operations[op](d1,d2)), 5)}")
     else:
