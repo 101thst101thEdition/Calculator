@@ -14,13 +14,19 @@ operations = {
     'acos':math.acos,
     'tan':math.tan,
     'atan':math.atan,
+    'ln':math.log,
+}
+irrationals = {
+    'pi':math.pi,
+    'e':math.e,
+    'tau':math.tau,
 }
 
 def calculate(d1,op,d2):
-    if d1 == 'pi':
-        d1 = math.pi
-    if d2 == 'pi':
-        d2 = math.pi
+    if d1 in irrationals:
+        d1 = irrationals[d1]
+    if d2 in irrationals:
+        d2 = irrationals[d2]
     try:
         d1 = float(d1)
         print("d1 attempted")
@@ -34,6 +40,8 @@ def calculate(d1,op,d2):
         start()
     if op in ('sin','cos','tan','asin','acos','atan'):
         return(f"The answer to the {op} of {d1} is {round(float(operations[op](d1)), 5)}")
+    elif op == '/^':
+        return(f"The answer to {d1} /^ {d2} is {round(float(operations[op](d1,1/d2)}")
     elif op in operations:
         return(f"The answer to {d1} {op} {d2} is {round(float(operations[op](d1,d2)), 5)}")
     else:
@@ -42,7 +50,7 @@ def calculate(d1,op,d2):
 def start():
     print('If using trigonometric functions, only the first digit will be used, inverse trig functions are done by including arc at the start of the input (inverse sin = arcsin etc.)')
     print(calculate(input('Input Digit 1:'), 
-                      input('Input an Operation (+,-,*,/,^,/^,sin,cos,tan):').lower(),
-                      input('Input Digit 2:')))
+                    input('Input an Operation:').lower(),
+                    input('Input Digit 2:')))
     start()
 start()
