@@ -29,13 +29,13 @@ def replace(value):
 def calculate(d1,op,d2):
     d1 = replace(d1)
     if op in singOperations:
-        return(f"The answer to the {op} of {d1} is {round(float(operations[op](d1)), 5)}")
+        return(f"The answer to the {op} of {d1} is {round(float(singOperations[op](d1)), 5)}")
     if op in operations:
         d2 = replace(d2)
         return(f"The answer to {d1} {op} {d2} is {round(float(operations[op](d1,d2)), 5)}")
     raise KeyError(op)
 def start():
-    print('If using trigonometric functions, only the first digit will be used, inverse trig functions are done by including a at the start of the input (inverse sin = asin etc.)')
+    print('If using trigonometric functions, only the first input will be used, inverse trig functions are done by including a at the start of the input (inverse sin = asin etc.)')
     d1 = input("Input digit 1: ")
     op = input("Input an operation: ")
     d2 = None if op in singOperations else input("Input digit 2")
