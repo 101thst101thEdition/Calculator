@@ -34,6 +34,7 @@ constants = {
 def replace(value):
     value = value.strip().lower()
     return constants[value] if value in constants else float(value)
+
 def calculate(d1,op,d2):
     d1 = replace(d1)
     if op in singOperations:
@@ -42,6 +43,7 @@ def calculate(d1,op,d2):
         d2 = replace(d2)
         return(f"The answer to {d1} {op} {d2} is {round(float(operations[op](d1,d2)), 5)}")
     raise KeyError(op)
+
 def start():
     print('If using trigonometric functions, only the first input will be used, inverse trig functions are done by including a at the start of the input (inverse sin = asin etc.)')
     d1 = input("Input digit 1: ")
@@ -59,4 +61,6 @@ def start():
         print("Zero cannot be used here")
     except OverflowError:
         print("Answer too large")
-if __name__ = "__main__": start()
+
+
+if __name__ == "__main__": start()
