@@ -10,7 +10,8 @@
     asin\arcsin, acos\arccos, atan\arctan = inverse sine, cosine and tangent of *x*
     ln = natural logarithm
 ### Constants
-  pi = π, 3.14159265
-  tau = τ, double of π, 6.28318531
-  e = Euler's number, 2.71828182
+  #### Common constants
+    pi = π, 3.14159265
+    tau = τ, double of π, 6.28318531
+    e = Euler's number, 2.71828182
   
