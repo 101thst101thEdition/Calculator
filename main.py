@@ -1,6 +1,8 @@
 import math
 import operator
 
+ans = 0.0
+
 operations = {
     '+':operator.add,
     '-':operator.sub,
@@ -38,15 +40,17 @@ def start():
     print('If using trigonometric functions, only the first input will be used, inverse trig functions are done by including a at the start of the input (inverse sin = asin etc.)')
     d1 = input("Input digit 1: ")
     op = input("Input an operation: ")
-    d2 = None if op in singOperations else input("Input digit 2")
+    d2 = None if op in singOperations else input("Input digit 2: ")
     try:
         print(calculate(d1, op, d2))
+    except TypeError:
+        print("Answer too complex")
     except KeyError as e:
         print(f"{e} is not a valid operator")
-    except ValueError as e:
-        print(f"{e} is not a valid input")
+    except ValueError:
+        print("Domain is invalid")
     except ZeroDivisionError:
-        print("Zero is not divisible")
+        print("Zero cannot be used here")
     except OverflowError:
         print("Answer too large")
-start()
+if __name__ = "__main__": start()
