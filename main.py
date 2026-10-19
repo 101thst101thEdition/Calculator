@@ -9,7 +9,10 @@ operations = {
     '*':operator.mul,
     '/':operator.truediv,
     "^":operator.pow,
-    '/^':lambda a,b: operator.pow(a, 1/b)
+    '/^':lambda a,b: operator.pow(a, 1/b),
+    '%':operator.mod,
+    
+    
 }
 singOperations = {
     'sin':math.sin,
@@ -19,15 +22,18 @@ singOperations = {
     'tan':math.tan,
     'atan':math.atan,
     'ln':math.log,
+    '!':math.factorial,
+    'sqrt':lambda a: operator.pow(a, 1/2)
 }
-irrationals = {
+constants = {
     'pi':math.pi,
     'e':math.e,
     'tau':math.tau,
+    'ans':ans,
 }
 def replace(value):
     value = value.strip().lower()
-    return irrationals[value] if value in irrationals else float(value)
+    return constants[value] if value in constants else float(value)
 def calculate(d1,op,d2):
     d1 = replace(d1)
     if op in singOperations:
