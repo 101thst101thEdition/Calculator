@@ -1,7 +1,13 @@
 import math
 import operator
 
-ans = 0.0
+def factorial(x):
+    if x > 180:
+        raise OverflowError
+    if x.is_integer():
+        return(math.factorial(int(x)))
+    else:
+        raise ValueError()
 
 operations = {
     '+':operator.add,
@@ -11,8 +17,7 @@ operations = {
     "^":operator.pow,
     '/^':lambda a,b: operator.pow(a, 1/b),
     '%':operator.mod,
-    
-    
+    'log':math.log,
 }
 singOperations = {
     'sin':math.sin,
@@ -22,45 +27,109 @@ singOperations = {
     'tan':math.tan,
     'atan':math.atan,
     'ln':math.log,
-    '!':math.factorial,
-    'sqrt':lambda a: operator.pow(a, 1/2)
+    '!':factorial,
+    'sqrt':math.sqrt
 }
+trig = ['sin','cos','tan']
+iTrig = ['asin','acos','atan']
 constants = {
     'pi':math.pi,
     'e':math.e,
     'tau':math.tau,
-    'ans':ans,
 }
-def replace(value):
-    value = value.strip().lower()
-    return constants[value] if value in constants else float(value)
 
-def calculate(d1,op,d2):
-    d1 = replace(d1)
+class BadInput(Exception):
+    pass
+class BadAnswer(Exception):
+    pass
+def replace(value, ans):
+    if value is None:
+        raise BadInput('An input is missing')
+    value = value.strip().lower()
+    if "nan" in value:
+        raise BadInput(f"'{value}' is not a number")
+    if value == 'ans':
+        if ans is None: 
+            raise BadInput('No answer found')
+        return ans
+    if value in constants:
+        return constants[value]
+    try:
+        return float(value)
+    except ValueError:
+        raise BadInput(f"'{value}' is not a number") from None
+
+def calculate(d1, op, d2, ans, degrees):
+    d1 = replace(d1, ans)
     if op in singOperations:
-        return(f"The answer to the {op} of {d1} is {round(float(singOperations[op](d1)), 5)}")
-    if op in operations:
-        d2 = replace(d2)
-        return(f"The answer to {d1} {op} {d2} is {round(float(operations[op](d1,d2)), 5)}")
-    raise KeyError(op)
+        if d2 is not None:
+            raise BadInput('Too many values given for this operation')
+        if degrees and op in trig:
+            d1 = math.radians(d1) 
+        value = float(singOperations[op](d1))
+        if degrees and op in iTrig:
+            value = math.degrees(value)
+        realVal = round(value, 5)+0.0
+    elif op in operations:
+        d2 = replace(d2, ans)
+        realVal = round(float(operations[op](d1,d2)), 5)+0.0
+    else:
+        raise BadInput(f"{op} is not a valid operator")
+    if math.isnan(realVal):
+        raise BadAnswer('Not a real answer found')
+    return(realVal)
 
 def start():
-    print('If using trigonometric functions, only the first input will be used, inverse trig functions are done by including a at the start of the input (inverse sin = asin etc.)')
-    d1 = input("Input digit 1: ")
-    op = input("Input an operation: ")
-    d2 = None if op in singOperations else input("Input digit 2: ")
-    try:
-        print(calculate(d1, op, d2))
-    except TypeError:
-        print("Answer too complex")
-    except KeyError as e:
-        print(f"{e} is not a valid operator")
-    except ValueError:
-        print("Domain is invalid")
-    except ZeroDivisionError:
-        print("Zero cannot be used here")
-    except OverflowError:
-        print("Answer too large")
+    ans = None
+    degrees = False
+    history = []
+    while True:
+        solving = input('Input expression or command (Include spaces and if using a unary operation, have the operation come second):').split()
+        if len(solving) == 3:
+            d1 = solving[0]
+            op = solving[1].lower()
+            d2 = solving[2]
+        elif len(solving) == 2:
+            d1 = solving[0]
+            op = solving[1].lower()
+            d2 = None
+        elif len(solving) == 1:
+            command = solving[0].lower()
+            if command == 'history':
+                if not history:
+                    print('History not found')
+                else:
+                    for entry in history:
+                        print(entry)
+            elif command == 'mode':
+                degrees = not degrees
+                print(f'Degrees active: {degrees}')
+            elif command == 'quit':
+                break
+            else: 
+                print('Not a valid command')
+            continue
+        else:
+            print('Expression is of wrong length')
+            continue
+        try:
+            result = calculate(d1, op, d2, ans, degrees)
+            expr = f"{d1} {op}" if op in singOperations else f"{d1} {op} {d2}"
+        except TypeError:
+            print("Answer too complex")
+        except ValueError:
+            print("Domain is invalid")
+        except ZeroDivisionError:
+            print("Zero cannot be used here")
+        except OverflowError:
+            print("Answer too large")
+        except (BadInput, BadAnswer) as e:
+            print(e)
+        else:
+            history.append(f"{expr} = {result}")
+            ans = result
+            print(f"Answer: {ans}")
+
 
 
 if __name__ == "__main__": start()
