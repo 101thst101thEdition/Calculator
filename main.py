@@ -59,7 +59,7 @@ def replace(value, ans):
     except ValueError:
         raise BadInput(f"'{value}' is not a number") from None
 
-def calculate(d1, op, d2, ans, degrees):
+def calculate(d1, op, d2, ans, degrees, roundTo):
     d1 = replace(d1, ans)
     if op in singOperations:
         if d2 is not None:
@@ -69,10 +69,10 @@ def calculate(d1, op, d2, ans, degrees):
         value = float(singOperations[op](d1))
         if degrees and op in iTrig:
             value = math.degrees(value)
-        realVal = round(value, 5)+0.0
+        realVal = round(value, roundTo)+0.0
     elif op in operations:
         d2 = replace(d2, ans)
-        realVal = round(float(operations[op](d1,d2)), 5)+0.0
+        realVal = round(float(operations[op](d1,d2)), roundTo)+0.0
     else:
         raise BadInput(f"{op} is not a valid operator")
     if math.isnan(realVal):
@@ -83,6 +83,7 @@ def start():
     ans = None
     degrees = False
     history = []
+    roundTo = 5
     while True:
         solving = input('Input expression or command (Include spaces and if using a unary operation, have the operation come second):').split()
         if len(solving) == 3:
@@ -90,9 +91,17 @@ def start():
             op = solving[1].lower()
             d2 = solving[2]
         elif len(solving) == 2:
-            d1 = solving[0]
-            op = solving[1].lower()
-            d2 = None
+            if solving[0].strip().lower() == 'roundto':
+                try: 
+                    roundTo = int(solving[1])
+                    print(f"Rounding to {roundTo}")
+                except ValueError:
+                    print('Input is not an integer')
+                continue
+            else:
+                d1 = solving[0]
+                op = solving[1].lower()
+                d2 = None
         elif len(solving) == 1:
             command = solving[0].lower()
             if command == 'history':
@@ -113,7 +122,7 @@ def start():
             print('Expression is of wrong length')
             continue
         try:
-            result = calculate(d1, op, d2, ans, degrees)
+            result = calculate(d1, op, d2, ans, degrees, roundTo)
             expr = f"{d1} {op}" if op in singOperations else f"{d1} {op} {d2}"
         except TypeError:
             print("Answer too complex")
