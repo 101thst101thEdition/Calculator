@@ -51,7 +51,7 @@ def replace(value, ans):
     if value == 'ans':
         if ans is None: 
             raise BadInput('No answer found')
-        return ans
+        return float(ans)
     if value in constants:
         return constants[value]
     try:
