@@ -1,5 +1,6 @@
 import math
 import operator
+import statistics
 
 def factorial(x):
     if x > 180:
@@ -8,6 +9,13 @@ def factorial(x):
         return(math.factorial(int(x)))
     else:
         raise ValueError()
+    
+stats = {
+    'mean':statistics.mean,
+    'median':statistics.median,
+    'mode':statistics.mode,
+    'range':lambda x: max(x)-min(x),
+}
 
 operations = {
     '+':operator.add,
@@ -26,6 +34,12 @@ singOperations = {
     'acos':math.acos,
     'tan':math.tan,
     'atan':math.atan,
+    'csc':lambda x: 1/math.sin(x),
+    'acsc':lambda x: math.asin(1/x),
+    'sec':lambda x: 1/math.cos(x),
+    'asec':lambda x: math.acos(1/x),
+    'cot':lambda x: 1/math.tan(x),
+    'acot':lambda x: math.atan(1/x),
     'ln':math.log,
     '!':factorial,
     'sqrt':math.sqrt
@@ -86,6 +100,16 @@ def start():
     roundTo = 5
     while True:
         solving = input('Input expression or command (Include spaces and if using a unary operation, have the operation come second):').split()
+        if solving[0].strip().lower() in stats:
+            try:
+                data = [replace(i, ans) for i in solving[1:]]
+                result = stats[solving[0].strip().lower()](data)
+                print(f"{solving[0]} of {data}: {result}")
+            except ValueError:
+                print('Data is not valid')
+            except BadInput as e:
+                print(e)
+            continue
         if len(solving) == 3:
             d1 = solving[0]
             op = solving[1].lower()
