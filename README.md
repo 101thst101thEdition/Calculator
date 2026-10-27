@@ -20,9 +20,15 @@
     pi = π, 3.14159265
     tau = τ, double of π, 6.28318531
     e = Euler's number, 2.71828182
+    ans = uses the previous answer as an input
 ### Statistics 
   #### Basic Statistics
     mean x y z = takes the mean of the array
     median x y z = takes the median of the array
     mode x y z = takes the mode of the array
     range x y z = takes the range of the array
+### Commands
+    roundto = changes what decimal place the answer is rounded to, default 5
+    history = outputs the history of operations done
+    mode = switches between degrees and radians, default radians
+    
