@@ -11,10 +11,10 @@ def factorial(x):
         raise ValueError()
     
 stats = {
-    'mean':statistics.mean,
-    'median':statistics.median,
-    'mode':statistics.mode,
-    'range':lambda x: max(x)-min(x),
+    'statmean':statistics.mean,
+    'statmedian':statistics.median,
+    'statmode':statistics.mode,
+    'statrange':lambda x: max(x)-min(x),
 }
 
 operations = {
@@ -39,13 +39,13 @@ singOperations = {
     'sec':lambda x: 1/math.cos(x),
     'asec':lambda x: math.acos(1/x),
     'cot':lambda x: 1/math.tan(x),
-    'acot':lambda x: math.atan(1/x),
+    'acot':lambda x: math.pi/2 -math.atan(x),
     'ln':math.log,
     '!':factorial,
     'sqrt':math.sqrt
 }
-trig = ['sin','cos','tan']
-iTrig = ['asin','acos','atan']
+trig = ['sin','cos','tan','csc','sec','cot']
+iTrig = ['asin','acos','atan','acsc','asec','acot']
 constants = {
     'pi':math.pi,
     'e':math.e,
@@ -99,7 +99,10 @@ def start():
     history = []
     roundTo = 5
     while True:
-        solving = input('Input expression or command (Include spaces and if using a unary operation, have the operation come second):').split()
+        solving = input('Input expression or command (Include spaces and if using a unary operation, have the operation come second):')
+        if solving[0] is None:
+            print('No input found')
+            continue
         if solving[0].strip().lower() in stats:
             try:
                 data = [replace(i, ans) for i in solving[1:]]
@@ -110,7 +113,7 @@ def start():
             except BadInput as e:
                 print(e)
             continue
-        if len(solving) == 3:
+        elif len(solving) == 3:
             d1 = solving[0]
             op = solving[1].lower()
             d2 = solving[2]
